@@ -8,9 +8,13 @@ const mongoose = require('mongoose');
 const MongoStore = require('connect-mongo')(session);
 var hbs = require('express-handlebars');
 const fileUpload = require('express-fileupload');
-var herramientas = require('./libs/functions.js');
+
+var herramientas_inportadas = require('./libs/functions.js');
+
 var expressMongoDb = require('./libs/mongoDB.js');
 var confCC = require("./configs.js");
+var validator = require("email-validator");
+
 mongoose.connect(confCC.mongoConf.url);
 mongoose.Promise = global.Promise;
 const db = mongoose.connection
@@ -41,6 +45,7 @@ app.use(express.urlencoded({
   extended: true,
   limit: '25mb'
 }));
+
 app.use(express.static(path.join(__dirname, 'public/')));
 
 
@@ -63,8 +68,9 @@ app.use(session({
   }
 }));
 
+
 app.use(function(req, res, next) {
-  req.herramientas = herramientas
+  req.herramientas = herramientas_inportadas
   req.configuraciones=confCC
   next()
 });
@@ -77,9 +83,9 @@ app.use('/', indexRouter);
 // var checkauth = require("./libs/simpleauth.js");
 // app.use(checkauth);
 
-app.use(function(req,res,next){
-  res.redirect("/")
-});
+// app.use(function(req,res,next){
+//   res.redirect("/")
+// });
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -95,11 +101,11 @@ app.use(function(err, req, res, next) {
   // render the error page
   res.status(err.status || 500);
   res.render('error');
-  // res.send({
+  // res.send(JSON.stringify({
   //   ...err,
   //   tipo:"error",
   //   mensaje:"Cuenta Inactiva"
-  // })
+  // }))
 });
 
 module.exports = app;

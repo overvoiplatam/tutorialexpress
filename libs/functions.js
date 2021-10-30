@@ -1,4 +1,3 @@
-var MongoClient = require('mongodb').MongoClient;
 var validator = require("email-validator");
 const ObjectID = require('mongodb').ObjectID;
 var fs = require("fs");
