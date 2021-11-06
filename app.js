@@ -13,7 +13,6 @@ var herramientas_inportadas = require('./libs/functions.js');
 
 var expressMongoDb = require('./libs/mongoDB.js');
 var confCC = require("./configs.js");
-var validator = require("email-validator");
 
 mongoose.connect(confCC.mongoConf.url);
 mongoose.Promise = global.Promise;
@@ -31,6 +30,7 @@ app.engine('html', hbs({
 }));
 app.set('view engine', 'html');
 app.set('views', __dirname + '/views/pages');
+
 app.use(logger('dev'));
 //app.use(fileUpload());
 app.use(fileUpload({
@@ -72,12 +72,17 @@ app.use(session({
 app.use(function(req, res, next) {
   req.herramientas = herramientas_inportadas
   req.configuraciones=confCC
+  //req.session.micuenta = "Visiando"
+  //req.dbMongo.collection("Temporal").insertOne({name:"ME"})
   next()
 });
 
 
 var indexRouter = require("./routes/index.js");
 app.use('/', indexRouter);
+
+var nuevoRouter = require("./routes/otro.js");
+app.use('/mipaginafija', nuevoRouter);
 
 // ENABLE SIMPLE AUTH
 // var checkauth = require("./libs/simpleauth.js");

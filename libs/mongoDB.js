@@ -1,4 +1,3 @@
-var confCC = require("../configs.js");
 var MongoClient = require('mongodb').MongoClient;
 
 module.exports = function (conf, opts) {
